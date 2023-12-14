@@ -20,11 +20,11 @@ $ cargo install --path .
 ## Usage
 
 ```sh
-cfi --lang go --func http -o .
+cloud-functions-initializer --lang go --func http -o .
 ```
 
 ```sh
-cfi --lang node --func event -o /path/to/work
+cloud-functions-initializer --lang node --func event -o /path/to/work
 ```
 
 ### Options
