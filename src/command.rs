@@ -29,6 +29,9 @@ pub struct Args {
 
     #[arg(short, long, default_value = ".")]
     output: String,
+
+    #[arg(short, long)]
+    parents: bool,
 }
 
 impl Args {
@@ -42,5 +45,9 @@ impl Args {
 
     pub fn output(&self) -> &str {
         self.output.as_ref()
+    }
+
+    pub fn parents(&self) -> bool {
+        self.parents
     }
 }

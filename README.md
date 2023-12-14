@@ -29,8 +29,10 @@ cloud-functions-initializer --lang node --func event -o /path/to/work
 
 ### Options
 
-| Long       | short | Default | Comment           |
-| ---------- | ----- | ------- | ----------------- |
-| `--lang`   | `-l`  | `node`  | not runtime       |
-| `--func`   | `-f`  | `http`  | `http` or `event` |
-| `--output` | `-o`  | `.`     | \-                |
+| Long        | short | Default | Comment           |
+| ----------- | ----- | ------- | ----------------- |
+| `--lang`    | `-l`  | `node`  | not runtime       |
+| `--func`    | `-f`  | `http`  | `http` or `event` |
+| `--output`  | `-o`  | `.`     | \-                |
+| `--parents` | `-p`  | `false` | like `mkdir -p`   |
+

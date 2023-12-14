@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::{fs, path::Path, process::exit};
 
 use clap::Parser;
 use cloud_functions_initializer::{
@@ -9,11 +9,21 @@ use cloud_functions_initializer::{
     },
 };
 
-fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployError> {
-    match lang {
+fn deploy(args: &Args) -> Result<(), DeployError> {
+    let p = Path::new(args.output());
+    let path = p
+        .to_str()
+        .ok_or_else(|| DeployError::new(&format!("not valid path {}", args.output())))?;
+
+    if args.parents() {
+        fs::create_dir_all(p)
+            .map_err(|e| DeployError::new(&format!("cannot create directory: {}", e)))?;
+    }
+
+    match args.lang() {
         LangType::Go => {
-            let dep = GolangDeployer::new(output);
-            match ty {
+            let dep = GolangDeployer::new(path);
+            match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
                 }
@@ -26,8 +36,8 @@ fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployErro
         }
         LangType::Java => unimplemented!(),
         LangType::Node => {
-            let dep = NodeDeployer::new(output);
-            match ty {
+            let dep = NodeDeployer::new(path);
+            match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
                 }
@@ -40,8 +50,8 @@ fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployErro
         }
         LangType::CSharp => unimplemented!(),
         LangType::Php => {
-            let dep = PhpDeployer::new(output);
-            match ty {
+            let dep = PhpDeployer::new(path);
+            match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
                 }
@@ -53,8 +63,8 @@ fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployErro
             dep.add_dependency()?
         }
         LangType::Ruby => {
-            let dep = RubyDeployer::new(output);
-            match ty {
+            let dep = RubyDeployer::new(path);
+            match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
                 }
@@ -66,8 +76,8 @@ fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployErro
             dep.add_dependency()?
         }
         LangType::Python => {
-            let dep = PythonDeployer::new(output);
-            match ty {
+            let dep = PythonDeployer::new(path);
+            match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
                 }
@@ -85,7 +95,8 @@ fn deploy(lang: &LangType, ty: &FuncType, output: &str) -> Result<(), DeployErro
 
 fn main() {
     let args = Args::parse();
-    match deploy(args.lang(), args.func(), args.output()) {
+
+    match deploy(&args) {
         Ok(_) => {
             println!("Initial setup of function has been completed.");
             exit(0)

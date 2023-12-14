@@ -13,7 +13,7 @@ pub struct DeployError {
 }
 
 impl DeployError {
-    fn new(msg: &str) -> Self {
+    pub fn new(msg: &str) -> Self {
         Self {
             msg: msg.to_string(),
         }
