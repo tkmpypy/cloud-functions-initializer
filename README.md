@@ -5,7 +5,7 @@ Cloud Functionsのプロジェクト開始コマンド（自分用）<br />
 
 - [Cloud Functions の関数を作成する](https://cloud.google.com/functions/docs/writing)
 - [HTTP関数を作成する](https://cloud.google.com/functions/docs/writing/write-http-functions)
-- [イベントドリブン関数を作成する](https://cloud.google.com/functions/docs/writing/write-event-driven-functions)$
+- [イベントドリブン関数を作成する](https://cloud.google.com/functions/docs/writing/write-event-driven-functions)
 
 ※ **JVM系ランタイム** と **.NET系ランタイム** は実装していません
 
