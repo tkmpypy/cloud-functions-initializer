@@ -1,6 +1,6 @@
 # cloud-functions-initializer
 
-Cloud Functionsのプロジェクト開始コマンド（自分用）
+Cloud Functionsのプロジェクト開始コマンド（自分用）<br />
 以下のCloud Functionsのドキュメントをベースにしています
 
 - [Cloud Functions の関数を作成する](https://cloud.google.com/functions/docs/writing)
