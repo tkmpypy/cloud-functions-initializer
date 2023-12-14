@@ -29,7 +29,7 @@ pub struct Args {
 
     #[arg(short, long, default_value = ".")]
     output: String,
-    
+
     #[arg(short, long)]
     parents: bool,
 }

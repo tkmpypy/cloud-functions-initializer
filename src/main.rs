@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::{fs, path::Path, process::exit};
 
 use clap::Parser;
 use cloud_functions_initializer::{
@@ -10,9 +10,19 @@ use cloud_functions_initializer::{
 };
 
 fn deploy(args: &Args) -> Result<(), DeployError> {
+    let p = Path::new(args.output());
+    let path = p
+        .to_str()
+        .ok_or_else(|| DeployError::new(&format!("not valid path {}", args.output())))?;
+
+    if args.parents() {
+        fs::create_dir_all(p)
+            .map_err(|e| DeployError::new(&format!("cannot create directory: {}", e)))?;
+    }
+
     match args.lang() {
         LangType::Go => {
-            let dep = GolangDeployer::new(args.output());
+            let dep = GolangDeployer::new(path);
             match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
@@ -26,7 +36,7 @@ fn deploy(args: &Args) -> Result<(), DeployError> {
         }
         LangType::Java => unimplemented!(),
         LangType::Node => {
-            let dep = NodeDeployer::new(args.output());
+            let dep = NodeDeployer::new(path);
             match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
@@ -40,7 +50,7 @@ fn deploy(args: &Args) -> Result<(), DeployError> {
         }
         LangType::CSharp => unimplemented!(),
         LangType::Php => {
-            let dep = PhpDeployer::new(args.output());
+            let dep = PhpDeployer::new(path);
             match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
@@ -53,7 +63,7 @@ fn deploy(args: &Args) -> Result<(), DeployError> {
             dep.add_dependency()?
         }
         LangType::Ruby => {
-            let dep = RubyDeployer::new(args.output());
+            let dep = RubyDeployer::new(path);
             match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
@@ -66,7 +76,7 @@ fn deploy(args: &Args) -> Result<(), DeployError> {
             dep.add_dependency()?
         }
         LangType::Python => {
-            let dep = PythonDeployer::new(args.output());
+            let dep = PythonDeployer::new(path);
             match args.func() {
                 FuncType::Http => {
                     dep.deploy_http()?;
